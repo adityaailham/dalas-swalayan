@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <g fill="#F97316">
+    <!-- Inner Text DS -->
+    <text x="50" y="78" font-family="'Times New Roman', serif" font-weight="bold" font-size="38" text-anchor="middle">DS</text>
+    
+    <!-- Outer Circle -->
+    <circle cx="50" cy="65" r="26" fill="none" stroke="#F97316" stroke-width="5" />
+    
+    <!-- Crown Bottom Rim -->
+    <path d="M 26 38 Q 50 44 74 38 L 76 34 Q 50 40 24 34 Z" />
+    
+    <!-- White Jewels on Rim -->
+    <circle cx="34" cy="36.5" r="2" fill="#FFF" />
+    <circle cx="42" cy="38.5" r="2" fill="#FFF" />
+    <circle cx="50" cy="39" r="2" fill="#FFF" />
+    <circle cx="58" cy="38.5" r="2" fill="#FFF" />
+    <circle cx="66" cy="36.5" r="2" fill="#FFF" />
+
+    <!-- Crown Dome / Peaks -->
+    <!-- Carved out with inner empty spaces using SVG path logic or just drawing the solid shape since it will be tiny -->
+    <path d="M 24 32 C 20 15, 30 10, 40 25 L 45 25 C 45 10, 55 10, 55 25 L 60 25 C 70 10, 80 15, 76 32 Q 50 38 24 32 Z" />
+    
+    <!-- Fleur-de-lis Top -->
+    <path d="M 50 5 C 45 10, 46 12, 50 14 C 54 12, 55 10, 50 5 Z M 44 11 C 48 11, 48 14, 50 14 C 52 14, 52 11, 56 11 C 56 14, 44 14, 44 11 Z" />
+  </g>
+</svg>

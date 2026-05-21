@@ -1,5 +1,6 @@
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
+import PromoSection from "@/components/landing/PromoSection";
 import ProductHighlight from "@/components/landing/ProductHighlight";
 import FeaturesSection from "@/components/landing/FeaturesSection";
 import Footer from "@/components/landing/Footer";
@@ -16,6 +17,10 @@ export default function Home() {
           <HeroSection />
         </FadeIn>
         
+        <FadeIn delay={0.2} direction="up">
+          <PromoSection />
+        </FadeIn>
+
         <FadeIn delay={0.4} direction="up">
           <FeaturesSection />
         </FadeIn>
