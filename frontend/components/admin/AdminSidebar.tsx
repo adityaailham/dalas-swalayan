@@ -1,5 +1,5 @@
 "use client";
-import { Home, Package, Grid, Settings, LogOut } from "lucide-react";
+import { Home, Package, Grid, Settings, Tag, LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -7,8 +7,9 @@ import { usePathname } from "next/navigation";
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
   { name: "Produk", href: "/products", icon: Package },
-  { name: "Kategori", href: "#", icon: Grid },
-  { name: "Pengaturan", href: "#", icon: Settings },
+  { name: "Kategori", href: "/categories", icon: Grid },
+  { name: "Promo", href: "/promos", icon: Tag },
+  { name: "Pengaturan", href: "/settings", icon: Settings },
 ];
 
 export default function AdminSidebar() {
