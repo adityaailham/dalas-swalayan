@@ -49,9 +49,6 @@ export default function ProductHighlight() {
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Kategori Produk</h2>
           <p className="text-gray-500">Berbagai kategori lengkap untuk memenuhi kebutuhan Anda</p>
         </div>
-        <Link href="#" className="text-orange-500 font-medium flex items-center gap-2 hover:gap-3 transition-all mt-4 md:mt-0">
-          Lihat Semua Kategori <ArrowRight className="w-4 h-4" />
-        </Link>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">

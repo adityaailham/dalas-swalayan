@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -31,9 +32,11 @@ export default function HeroSection() {
             Kami hadir untuk memenuhi kebutuhan sehari-hari Anda dengan produk
             lengkap, kualitas terbaik, dan pelayanan yang ramah.
           </p>
-          <button className="mt-10 bg-orange-500 hover:bg-orange-600 transition-all text-white px-8 py-3.5 rounded-xl font-bold text-lg shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 hover:-translate-y-1">
-            Tentang Kami
-          </button>
+          <Link href="/#tentang">
+            <button className="mt-10 bg-orange-500 hover:bg-orange-600 transition-all text-white px-8 py-3.5 rounded-xl font-bold text-lg shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 hover:-translate-y-1 cursor-pointer">
+              Tentang Kami
+            </button>
+          </Link>
         </div>
       </div>
     </section>

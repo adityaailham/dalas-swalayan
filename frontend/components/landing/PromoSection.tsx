@@ -6,6 +6,28 @@ import { useEffect, useRef, useState } from "react";
 export default function PromoSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [promos, setPromos] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/promos`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.data) {
+          // Hanya ambil promo yang aktif
+          const activePromos = data.data.filter((p: any) => p.status === 'aktif');
+          setPromos(activePromos);
+        }
+      })
+      .catch(err => console.error("Error fetching promos:", err));
+  }, []);
+
+  const bgGradients = [
+    "bg-gradient-to-br from-orange-400 to-orange-500",
+    "bg-gradient-to-br from-green-500 to-green-600",
+    "bg-gradient-to-br from-red-500 to-red-600",
+    "bg-gradient-to-br from-blue-500 to-blue-600",
+    "bg-gradient-to-br from-amber-500 to-amber-600"
+  ];
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -52,53 +74,8 @@ export default function PromoSection() {
     return () => clearInterval(intervalId); // Bersihkan interval saat komponen dibongkar atau di-hover
   }, [isHovered]);
 
-  const promos = [
-    {
-      id: 1,
-      badge: "PROMO SPESIAL",
-      title: "HEMAT SETIAP HARI",
-      desc: "Belanja lebih banyak lebih hemat!",
-      btnText: "Belanja Sekarang",
-      bgClass: "bg-gradient-to-br from-orange-400 to-orange-500",
-      img: "/cat_sembako.png",
-    },
-    {
-      id: 2,
-      badge: "DISKON HINGGA",
-      title: "50%",
-      desc: "Untuk produk pilihan",
-      btnText: "Lihat Promo",
-      bgClass: "bg-gradient-to-br from-green-500 to-green-600",
-      img: "/cat_snack.png",
-    },
-    {
-      id: 3,
-      badge: "WEEKEND DEALS",
-      title: "MURAH BANGET!",
-      desc: "Berlaku setiap Sabtu & Minggu",
-      btnText: "Belanja Sekarang",
-      bgClass: "bg-gradient-to-br from-red-500 to-red-600",
-      img: "/grocery_bag.png",
-    },
-    {
-      id: 4,
-      badge: "SPESIAL MEMBER",
-      title: "BELI 2 GRATIS 1",
-      desc: "Untuk aneka minuman segar",
-      btnText: "Lihat Produk",
-      bgClass: "bg-gradient-to-br from-blue-500 to-blue-600",
-      img: "/cat_minuman.png",
-    },
-    {
-      id: 5,
-      badge: "FLASH SALE",
-      title: "DISKON 30%",
-      desc: "Produk frozen food pilihan",
-      btnText: "Borong Sekarang",
-      bgClass: "bg-gradient-to-br from-amber-500 to-amber-600",
-      img: "/cat_frozenfood.png",
-    },
-  ];
+  // Jangan render seksi promo jika tidak ada promo yang aktif
+  if (promos.length === 0) return null;
 
   return (
     <section
@@ -142,33 +119,36 @@ export default function PromoSection() {
         className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-6 pt-2"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        {promos.map((promo) => (
+        {promos.map((promo, idx) => (
           <div
             key={promo.id}
-            className={`shrink-0 w-[85%] md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] snap-start rounded-[2rem] ${promo.bgClass} p-8 text-white relative overflow-hidden min-h-[240px] flex flex-col justify-center shadow-lg shadow-gray-200/50 border border-white/20 transition-transform duration-300 hover:scale-[1.02] cursor-pointer group`}
+            className={`shrink-0 w-[85%] md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] snap-start rounded-[2rem] ${bgGradients[idx % bgGradients.length]} p-8 text-white relative overflow-hidden min-h-[240px] flex flex-col justify-center shadow-lg shadow-gray-200/50 border border-white/20 transition-transform duration-300 hover:scale-[1.02] cursor-pointer group`}
           >
             {/* Teks Promo */}
             <div className="relative z-10 w-[65%]">
-              <span className="text-xs font-bold tracking-wider opacity-90">
-                {promo.badge}
+              <span className="text-xs font-bold tracking-wider opacity-90 uppercase">
+                SPESIAL UNTUKMU
               </span>
-              <h3 className="text-3xl lg:text-4xl font-extrabold mt-1 mb-2 leading-[1.1]">
+              <h3 className="text-3xl lg:text-4xl font-extrabold mt-1 mb-2 leading-[1.1] capitalize">
                 {promo.title}
               </h3>
-              <p className="text-sm opacity-90 mb-6">{promo.desc}</p>
+              <p className="text-sm opacity-90 mb-6 line-clamp-2">{promo.description}</p>
               <button className="bg-white text-gray-900 font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all shadow-sm">
-                {promo.btnText}
+                Lihat Promo
               </button>
             </div>
 
             {/* Gambar Produk */}
-            <div className="absolute -right-6 -bottom-6 w-[55%] h-[120%] pointer-events-none group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500 ease-out">
-              <Image
-                src={promo.img}
-                alt={promo.title}
-                fill
-                className="object-contain object-bottom drop-shadow-2xl"
-              />
+            <div className="absolute right-0 bottom-0 w-1/2 h-full p-4 pointer-events-none group-hover:scale-105 transition-transform duration-500 ease-out flex items-center justify-end md:justify-center">
+              {promo.banner_url ? (
+                <img
+                  src={promo.banner_url}
+                  alt={promo.title}
+                  className="max-w-full max-h-full object-contain drop-shadow-2xl rounded-xl border-4 border-white/10"
+                />
+              ) : (
+                <Image src="/grocery_bag.png" alt="Promo" fill className="object-contain object-center drop-shadow-2xl opacity-50 p-6" />
+              )}
             </div>
 
             {/* Dekorasi Aksen */}
@@ -180,7 +160,7 @@ export default function PromoSection() {
       {/* Mobile Lihat Semua */}
       <div className="flex md:hidden justify-center mt-2">
         <button className="text-orange-500 font-semibold flex items-center gap-1 hover:text-orange-600 transition-colors">
-          Lihat Semua Promo <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-4 h-4" />
         </button>
       </div>
     </section>

@@ -25,7 +25,7 @@ export default function FeaturesSection() {
   ];
 
   return (
-    <section className="px-8 md:px-16 relative z-20 max-w-7xl mx-auto mb-16">
+    <section id="tentang" className="px-8 md:px-16 relative z-20 max-w-7xl mx-auto mb-16">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-2 bg-white rounded-3xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] py-6 md:py-8 px-6 lg:px-10 border border-gray-100/50">
         {features.map((feature, index) => (
           <div

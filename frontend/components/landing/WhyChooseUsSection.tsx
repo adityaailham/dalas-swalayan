@@ -26,7 +26,7 @@ export default function WhyChooseUsSection() {
   ];
 
   return (
-    <section className="px-8 md:px-16 py-16 max-w-7xl mx-auto">
+    <section id="keunggulan" className="px-8 md:px-16 py-16 max-w-7xl mx-auto">
       <div className="flex flex-col lg:flex-row gap-12 items-center">
         {/* Left Content */}
         <div className="lg:w-1/2">

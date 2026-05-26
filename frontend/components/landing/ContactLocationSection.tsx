@@ -3,7 +3,7 @@ import { MapPin, Phone, Clock } from "lucide-react";
 
 export default function ContactLocationSection() {
   return (
-    <section className="px-8 md:px-16 py-16 bg-white border-t border-gray-100 mt-12">
+    <section id="informasi" className="px-8 md:px-16 py-16 bg-white border-t border-gray-100 mt-12">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12">
         
         {/* Left: Map */}

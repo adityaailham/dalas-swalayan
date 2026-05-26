@@ -1,18 +1,82 @@
 "use client";
 
-import { X, ShoppingBag, Milk, Cookie, Droplet } from "lucide-react";
+import { X } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function AddCategoryPage() {
-  const [selectedIcon, setSelectedIcon] = useState<number>(0);
+  const router = useRouter();
+  
+  // State untuk form
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const icons = [
-    { id: 0, icon: ShoppingBag },
-    { id: 1, icon: Milk },
-    { id: 2, icon: Cookie },
-    { id: 3, icon: Droplet },
-  ];
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
+        method: "POST",
+        body: formData,
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setImageUrl(data.url);
+      } else {
+        alert("Gagal upload gambar kategori.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error sistem.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!name.trim()) {
+      alert("⚠️ Nama Kategori tidak boleh kosong!");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // 🚀 KIRIM DATA KE BACKEND GOLANG
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          description: description,
+          image_url: imageUrl
+        }),
+      });
+
+      if (response.ok) {
+        // Jika sukses, kembali ke halaman Kategori
+        router.push("/categories");
+      } else {
+        alert("❌ Gagal menyimpan kategori.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("❌ Terjadi kesalahan saat menghubungi server.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="w-full max-w-xl mx-auto pb-10">
@@ -37,7 +101,9 @@ export default function AddCategoryPage() {
             <label className="block text-sm font-bold text-gray-900 mb-2">Nama Kategori</label>
             <input 
               type="text" 
-              placeholder="Masukkan nama kategori" 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Masukkan nama kategori (contoh: Snack)" 
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all text-sm"
             />
           </div>
@@ -47,34 +113,52 @@ export default function AddCategoryPage() {
             <label className="block text-sm font-bold text-gray-900 mb-2">Deskripsi (Opsional)</label>
             <textarea 
               rows={4}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               placeholder="Masukkan deskripsi kategori" 
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all text-sm resize-none"
             />
           </div>
 
-          {/* Icon Selection */}
+          {/* Gambar Banner Kategori */}
           <div>
-            <label className="block text-sm font-bold text-gray-900 mb-3">Icon</label>
-            <div className="flex gap-4">
-              {icons.map((item) => {
-                const IconComponent = item.icon;
-                const isActive = selectedIcon === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => setSelectedIcon(item.id)}
-                    className={`w-16 h-16 rounded-2xl flex items-center justify-center border-2 transition-all ${
-                      isActive 
-                        ? "border-orange-500 bg-orange-50/50 text-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.15)]" 
-                        : "border-gray-100 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
-                    }`}
-                  >
-                    <IconComponent className="w-7 h-7" strokeWidth={isActive ? 2 : 1.5} />
-                  </button>
-                );
-              })}
+            <label className="block text-sm font-bold text-gray-900 mb-2">Upload Gambar Banner (Opsional)</label>
+            <div className="relative border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center text-center hover:bg-gray-50 hover:border-orange-300 transition-colors cursor-pointer group overflow-hidden h-32">
+              
+              {isUploading && (
+                <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10">
+                  <span className="w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></span>
+                </div>
+              )}
+
+              {imageUrl ? (
+                <>
+                  <img src={imageUrl} alt="Preview Kategori" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button 
+                      onClick={(e) => { e.preventDefault(); setImageUrl(""); }}
+                      className="bg-white text-red-500 px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm hover:bg-red-50"
+                    >
+                      Hapus Gambar
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-0"
+                  />
+                  <p className="text-sm font-bold text-gray-900">Klik untuk upload gambar</p>
+                  <p className="text-xs text-gray-500 mt-1">JPG, PNG (Digunakan untuk banner depan)</p>
+                </>
+              )}
             </div>
           </div>
+
+
 
           {/* Action Buttons */}
           <div className="flex gap-3 justify-end pt-6 border-t border-gray-100 mt-2">
@@ -84,8 +168,12 @@ export default function AddCategoryPage() {
             >
               Batal
             </Link>
-            <button className="px-6 py-2.5 rounded-xl bg-orange-600 text-white font-bold text-sm hover:bg-orange-700 shadow-sm shadow-orange-500/20 transition-all w-full sm:w-auto">
-              Simpan Kategori
+            <button 
+              onClick={handleSave}
+              disabled={isSubmitting}
+              className="px-6 py-2.5 rounded-xl bg-orange-600 text-white font-bold text-sm hover:bg-orange-700 shadow-sm shadow-orange-500/20 transition-all w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? "Menyimpan..." : "Simpan Kategori"}
             </button>
           </div>
 

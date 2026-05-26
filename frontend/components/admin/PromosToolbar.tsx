@@ -1,7 +1,24 @@
 import { Search, ChevronDown, Filter, Plus } from "lucide-react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
-export default function PromosToolbar() {
+interface PromosToolbarProps {
+  onSearch: (keyword: string) => void;
+  onFilterStatus: (status: string) => void;
+}
+
+export default function PromosToolbar({ onSearch, onFilterStatus }: PromosToolbarProps) {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Debounce effect
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      onSearch(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+
   return (
     <div className="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
       
@@ -9,6 +26,8 @@ export default function PromosToolbar() {
         <Search className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
         <input 
           type="text" 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Cari promo..." 
           className="w-full pl-11 pr-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all text-sm"
         />
@@ -18,10 +37,10 @@ export default function PromosToolbar() {
         {/* Dropdown Status */}
         <div className="relative">
           <select 
-            defaultValue=""
+            onChange={(e) => onFilterStatus(e.target.value)}
             className="appearance-none bg-white border border-gray-200 text-gray-700 py-2.5 pl-4 pr-10 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 cursor-pointer"
           >
-            <option value="" disabled>Semua Status</option>
+            <option value="">Semua Status</option>
             <option value="aktif">Aktif</option>
             <option value="nonaktif">Nonaktif</option>
           </select>

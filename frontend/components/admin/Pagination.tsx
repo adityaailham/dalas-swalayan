@@ -5,9 +5,10 @@ interface PaginationProps {
   totalPages: number;
   totalItems: number;
   itemsPerPage: number;
+  onPageChange: (page: number) => void;
 }
 
-export default function Pagination({ currentPage, totalPages, totalItems, itemsPerPage }: PaginationProps) {
+export default function Pagination({ currentPage, totalPages, totalItems, itemsPerPage, onPageChange }: PaginationProps) {
   // Hitung rentang item yang sedang ditampilkan
   const startItem = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
@@ -21,6 +22,7 @@ export default function Pagination({ currentPage, totalPages, totalItems, itemsP
       <div className="flex gap-1">
         <button 
           disabled={currentPage <= 1}
+          onClick={() => onPageChange(currentPage - 1)}
           className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
@@ -33,6 +35,7 @@ export default function Pagination({ currentPage, totalPages, totalItems, itemsP
         
         <button 
           disabled={currentPage >= totalPages || totalPages === 0}
+          onClick={() => onPageChange(currentPage + 1)}
           className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
         >
           <ChevronRight className="w-4 h-4" />

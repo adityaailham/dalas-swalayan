@@ -1,154 +1,141 @@
 "use client";
 
-import { Package, ShieldCheck, Grid, AlertTriangle, ChevronDown } from "lucide-react";
+import { Package, ShieldCheck, Grid, Megaphone } from "lucide-react";
 import Image from "next/image";
 import AdminHeader from "@/components/admin/AdminHeader";
+import { useEffect, useState } from "react";
+import { apiFetch } from "@/lib/fetcher";
 
 export default function AdminDashboardPage() {
+  // State untuk menyimpan angka asli dari Golang
+  const [dashboardStats, setDashboardStats] = useState({
+    total_products: 0,
+    active_products: 0,
+    total_categories: 0,
+    active_promos: 0
+  });
+
+  // Fetch dari API
+  useEffect(() => {
+    apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/stats`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.data) {
+          setDashboardStats(data.data);
+        }
+      })
+      .catch(err => console.error("Gagal mengambil statistik dashboard:", err));
+  }, []);
+
+  // Menyuntikkan variabel dari State ke dalam array desain kartu premium
   const stats = [
     {
       title: "Total Produk",
-      value: "1280",
-      desc: "Semua produk terdaftar",
-      trend: "↗ 12% dari bulan lalu",
-      trendColor: "text-orange-500",
-      icon: <Package className="w-6 h-6 text-white" />,
-      iconBg: "bg-orange-500"
+      value: dashboardStats.total_products.toString(),
+      desc: "Keseluruhan produk terdaftar di inventaris",
+      trend: "Data Sinkron",
+      trendColor: "text-blue-600",
+      icon: <Package className="w-7 h-7 text-blue-600" />,
+      iconBg: "bg-white border border-blue-100",
+      bgGradient: "from-blue-50/60 to-indigo-50/20 border-blue-100/50",
+      glowColor: "bg-blue-400"
     },
     {
       title: "Produk Aktif",
-      value: "1125",
-      desc: "Produk yang aktif",
-      trend: "↗ 10% dari bulan lalu",
-      trendColor: "text-orange-500",
-      icon: <ShieldCheck className="w-6 h-6 text-white" />,
-      iconBg: "bg-orange-500"
+      value: dashboardStats.active_products.toString(),
+      desc: "Produk yang tampil dan siap dijual",
+      trend: "Terverifikasi",
+      trendColor: "text-emerald-600",
+      icon: <ShieldCheck className="w-7 h-7 text-emerald-600" />,
+      iconBg: "bg-white border border-emerald-100",
+      bgGradient: "from-emerald-50/60 to-green-50/20 border-emerald-100/50",
+      glowColor: "bg-emerald-400"
     },
     {
-      title: "Kategori",
-      value: "24",
-      desc: "Semua kategori",
-      trend: "↘ 4% dari bulan lalu",
-      trendColor: "text-red-500",
-      icon: <Grid className="w-6 h-6 text-white" />,
-      iconBg: "bg-orange-500"
+      title: "Kategori Etalase",
+      value: dashboardStats.total_categories.toString(),
+      desc: "Pengelompokan jenis barang swalayan",
+      trend: "Sistem Aktif",
+      trendColor: "text-orange-600",
+      icon: <Grid className="w-7 h-7 text-orange-600" />,
+      iconBg: "bg-white border border-orange-100",
+      bgGradient: "from-orange-50/60 to-amber-50/20 border-orange-100/50",
+      glowColor: "bg-orange-400"
     },
     {
-      title: "Stok Menipis",
-      value: "18",
-      desc: "Perlu restock",
-      trend: "↘ 8% dari bulan lalu",
-      trendColor: "text-red-500",
-      icon: <AlertTriangle className="w-6 h-6 text-white" />,
-      iconBg: "bg-orange-500"
+      title: "Promo Aktif",
+      value: dashboardStats.active_promos.toString(),
+      desc: "Promo berjalan di halaman publik",
+      trend: "Terjadwal",
+      trendColor: "text-purple-600",
+      icon: <Megaphone className="w-7 h-7 text-purple-600" />,
+      iconBg: "bg-white border border-purple-100",
+      bgGradient: "from-purple-50/60 to-fuchsia-50/20 border-purple-100/50",
+      glowColor: "bg-purple-400"
     }
   ];
 
-  const topProducts = [
-    { name: "Beras Premium 5kg", sold: "Terjual 320", price: "Rp 64.500", img: "/cat_sembako.png" },
-    { name: "Minyak Goreng 2L", sold: "Terjual 280", price: "Rp 28.500", img: "/cat_sembako.png" },
-    { name: "Indomie Goreng", sold: "Terjual 250", price: "Rp 3.500", img: "/cat_snack.png" },
-    { name: "Susu UHT 1L", sold: "Terjual 210", price: "Rp 18.500", img: "/cat_minuman.png" },
-    { name: "Gula Pasir 1kg", sold: "Terjual 190", price: "Rp 14.000", img: "/cat_sembako.png" },
-  ];
 
   return (
     <div className="w-full max-w-6xl mx-auto pb-10">
       <AdminHeader />
 
-      {/* Stats Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {/* Welcome Banner (Pengisi Kekosongan Header) */}
+      <div className="bg-linear-to-br from-gray-900 via-gray-800 to-black rounded-[2rem] p-10 mb-10 text-white shadow-xl relative overflow-hidden border border-gray-800">
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-orange-500/20 blur-3xl mix-blend-screen pointer-events-none"></div>
+        <div className="absolute bottom-0 right-40 w-60 h-60 rounded-full bg-blue-500/10 blur-3xl mix-blend-screen pointer-events-none"></div>
+        
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <h2 className="text-3xl font-extrabold mb-3 tracking-tight">Selamat Datang di Dalas Swalayan! 👋</h2>
+            <p className="text-gray-400 max-w-2xl leading-relaxed text-sm md:text-base">
+              Pusat kendali admin utama Anda. Pantau ketersediaan barang inventaris, pastikan produk aktif untuk pembeli, dan strukturkan etalase kategori Anda dengan rapi hari ini.
+            </p>
+          </div>
+          <div className="shrink-0 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl px-6 py-4 flex items-center gap-4">
+             <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center font-bold text-lg shadow-lg">DS</div>
+             <div>
+                <p className="text-xs text-gray-400 font-medium">Status Sistem</p>
+                <p className="font-bold text-green-400 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Online
+                </p>
+             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Row (Desain Premium) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, idx) => (
-          <div key={idx} className="bg-white rounded-2xl p-6 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] border border-gray-50">
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 shadow-md ${stat.iconBg}`}>
-              {stat.icon}
+          <div 
+            key={idx} 
+            className={`relative overflow-hidden rounded-[2rem] p-8 shadow-sm border bg-linear-to-br ${stat.bgGradient} transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 group cursor-default`}
+          >
+            {/* Glow / Dekorasi background melingkar */}
+            <div className={`absolute -right-8 -top-8 w-40 h-40 rounded-full blur-3xl opacity-30 ${stat.glowColor} group-hover:opacity-60 transition-opacity duration-500 pointer-events-none`}></div>
+            
+            {/* Ikon dan Badge Atas */}
+            <div className="flex justify-between items-start mb-8 relative z-10">
+              <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm ${stat.iconBg}`}>
+                {stat.icon}
+              </div>
+              <div className={`px-4 py-1.5 rounded-full text-xs font-bold ${stat.trendColor} bg-white/80 backdrop-blur-sm border border-white shadow-sm flex items-center gap-1.5`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${stat.glowColor}`}></span>
+                {stat.trend}
+              </div>
             </div>
-            <h3 className="text-gray-900 font-bold text-lg">{stat.title}</h3>
-            <div className="text-3xl font-extrabold text-gray-900 my-1">{stat.value}</div>
-            <p className="text-sm text-gray-500">{stat.desc}</p>
-            <p className={`text-xs font-semibold mt-4 ${stat.trendColor}`}>{stat.trend}</p>
+            
+            {/* Teks Bawah */}
+            <div className="relative z-10">
+              <h3 className="text-gray-600 font-semibold text-sm uppercase tracking-widest">{stat.title}</h3>
+              <div className="text-5xl font-black text-gray-900 mt-2 mb-3 tracking-tighter drop-shadow-sm">{stat.value}</div>
+              <p className="text-sm text-gray-500 font-medium">{stat.desc}</p>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Bottom Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        {/* Chart Column (Span 2) */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] border border-gray-50 flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="font-bold text-lg text-gray-900">Grafik Produk</h3>
-            <button className="flex items-center gap-2 text-sm text-gray-600 border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50">
-              6 Bulan Terakhir <ChevronDown className="w-4 h-4" />
-            </button>
-          </div>
-          
-          {/* Dummy Chart Area (Menggunakan SVG Tiruan agar mirip desain) */}
-          <div className="flex-1 relative w-full h-full min-h-[250px] mt-4 flex items-end">
-            <div className="absolute inset-0 flex flex-col justify-between pb-8">
-              {[1500, 1250, 1000, 750, 500, 250, 0].map((val, i) => (
-                <div key={i} className="flex items-center gap-4 w-full">
-                  <span className="text-xs text-gray-400 w-10 text-right">{val === 0 ? "0" : val}</span>
-                  <div className="flex-1 border-b border-gray-100"></div>
-                </div>
-              ))}
-            </div>
-            {/* SVG Line Chart Dummy */}
-            <div className="absolute inset-0 left-14 bottom-8 right-0">
-               <svg viewBox="0 0 1000 300" preserveAspectRatio="none" className="w-full h-full">
-                 <defs>
-                   <linearGradient id="gradientOrange" x1="0" y1="0" x2="0" y2="1">
-                     <stop offset="0%" stopColor="rgba(249, 115, 22, 0.2)" />
-                     <stop offset="100%" stopColor="rgba(249, 115, 22, 0)" />
-                   </linearGradient>
-                 </defs>
-                 <path d="M 0,220 L 160,150 L 320,180 L 480,100 L 640,60 L 800,10 L 1000,10 L 1000,300 L 0,300 Z" fill="url(#gradientOrange)" />
-                 <path d="M 0,220 L 160,150 L 320,180 L 480,100 L 640,60 L 800,10 L 1000,10" fill="none" stroke="#F97316" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-                 
-                 <circle cx="0" cy="220" r="6" fill="#F97316" />
-                 <circle cx="160" cy="150" r="6" fill="#F97316" />
-                 <circle cx="320" cy="180" r="6" fill="#F97316" />
-                 <circle cx="480" cy="100" r="6" fill="#F97316" />
-                 <circle cx="640" cy="60" r="6" fill="#F97316" />
-                 <circle cx="800" cy="10" r="6" fill="#F97316" />
-               </svg>
-            </div>
-            <div className="absolute bottom-0 left-14 right-0 flex justify-between text-xs text-gray-500 px-2">
-              <span>Nov</span>
-              <span>Des</span>
-              <span>Jan</span>
-              <span>Feb</span>
-              <span>Mar</span>
-              <span>Apr</span>
-              <span>Mei</span>
-            </div>
-          </div>
-        </div>
 
-        {/* Top Products Column */}
-        <div className="bg-white rounded-2xl p-6 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] border border-gray-50">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="font-bold text-lg text-gray-900">Produk Terlaris</h3>
-            <button className="text-sm text-orange-500 font-semibold hover:text-orange-600">Lihat Semua</button>
-          </div>
-          
-          <div className="flex flex-col gap-4">
-            {topProducts.map((prod, i) => (
-              <div key={i} className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center p-1 border border-gray-100">
-                  <Image src={prod.img} alt={prod.name} width={40} height={40} className="object-contain w-full h-full" />
-                </div>
-                <div className="flex-1">
-                  <h4 className="text-sm font-bold text-gray-900 leading-tight">{prod.name}</h4>
-                  <p className="text-xs text-gray-500 mt-1">{prod.sold}</p>
-                </div>
-                <div className="text-sm font-bold text-gray-900">{prod.price}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-      </div>
     </div>
   );
 }
