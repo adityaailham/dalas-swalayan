@@ -4,6 +4,7 @@ import { X, Upload, Calendar, Info } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { apiFetch } from "@/lib/fetcher";
 
 export default function AddPromoPage() {
   const router = useRouter();
@@ -29,7 +30,7 @@ export default function AddPromoPage() {
     formData.append("file", file);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
+      const response = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
         method: "POST",
         body: formData,
       });
@@ -57,7 +58,7 @@ export default function AddPromoPage() {
     setIsSubmitting(true);
     try {
       // Tembak API Golang
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/promos`, {
+      const response = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/promos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

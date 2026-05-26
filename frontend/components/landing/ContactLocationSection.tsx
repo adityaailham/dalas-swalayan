@@ -64,6 +64,7 @@ export default function ContactLocationSection() {
               src="/store_produce.png" 
               alt="Area Produk Segar" 
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
             />
           </div>

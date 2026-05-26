@@ -9,7 +9,7 @@ import PromoPreviewModal from "@/components/admin/PromoPreviewModal";
 import PromoEditModal from "@/components/admin/PromoEditModal";
 import { Promo } from "@/types";
 import useSWR from "swr";
-import { fetcher } from "@/lib/fetcher";
+import { fetcher, apiFetch } from "@/lib/fetcher";
 
 export default function AdminPromosPage() {
   const itemsPerPage = 4;
@@ -41,7 +41,7 @@ export default function AdminPromosPage() {
 
   const handleDelete = async (id: number) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/promos/${id}`, {
+      const res = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/promos/${id}`, {
         method: "DELETE"
       });
       if (res.ok) {

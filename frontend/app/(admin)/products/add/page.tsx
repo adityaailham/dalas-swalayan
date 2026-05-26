@@ -4,6 +4,7 @@ import { X, Upload, XCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { apiFetch } from "@/lib/fetcher";
 
 export default function AddProductPage() {
   const router = useRouter();
@@ -45,7 +46,7 @@ export default function AddProductPage() {
     formData.append("file", file); // Masukkan file fisik ke dalam koper "file"
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
+      const response = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
         method: "POST",
         body: formData, // Kirim sebagai multipart/form-data
       });
@@ -73,8 +74,8 @@ export default function AddProductPage() {
 
     setIsSubmitting(true);
     try {
-      // Tembak API Golang
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
+      // Tembak API Golang dengan token admin
+      const response = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

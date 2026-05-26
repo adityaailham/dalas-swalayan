@@ -58,12 +58,13 @@ export default function ProductHighlight() {
               {cat.icon}
             </div>
             <h3 className="font-bold text-gray-900 mb-1">{cat.title}</h3>
-            <p className="text-xs text-gray-500 mb-6 flex-grow">{cat.description}</p>
+            <p className="text-xs text-gray-500 mb-6 grow">{cat.description}</p>
             <div className="relative w-full h-24 mt-auto">
               <Image 
                 src={cat.image} 
                 alt={cat.title}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-contain group-hover:scale-105 transition-transform"
               />
             </div>

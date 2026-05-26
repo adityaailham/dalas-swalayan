@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { apiFetch } from "@/lib/fetcher";
 
 export default function AddCategoryPage() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function AddCategoryPage() {
     formData.append("file", file);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
+      const response = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
         method: "POST",
         body: formData,
       });
@@ -52,7 +53,7 @@ export default function AddCategoryPage() {
 
     try {
       // 🚀 KIRIM DATA KE BACKEND GOLANG
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
+      const response = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -18,7 +18,7 @@ export default function Navbar() {
     <nav className="flex items-center justify-between px-8 md:px-16 py-4 bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-100 sticky top-0 z-50 transition-all duration-300">
       <div className="flex items-center gap-2">
         <Link href="/">
-          <Image src="/logo.png" alt="Dalas Swalayan" width={200} height={80} className="w-auto h-12 md:h-16 object-contain" />
+          <Image src="/logo.png" alt="Dalas Swalayan" width={200} height={80} className="w-auto h-12 md:h-16 object-contain" priority={true} />
         </Link>
       </div>
       

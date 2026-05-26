@@ -23,7 +23,7 @@ export default function AdminSidebar() {
     <aside className="w-64 bg-white border-r border-gray-100 flex flex-col h-screen fixed left-0 top-0">
       {/* Logo */}
       <div className="p-6 flex justify-center mt-2 mb-2">
-        <Image src="/logo.png" alt="Dalas Swalayan" width={200} height={100} className="w-auto h-20 md:h-24 object-contain" />
+        <Image src="/logo.png" alt="Dalas Swalayan" width={200} height={100} className="w-auto h-20 md:h-24 object-contain" priority={true} />
       </div>
 
       {/* Navigation */}

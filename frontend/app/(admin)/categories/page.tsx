@@ -9,7 +9,7 @@ import { Category } from "@/types";
 import Pagination from "@/components/admin/Pagination";
 import CategoriesToolbar from "@/components/admin/CategoriesToolbar";
 import useSWR from "swr";
-import { fetcher } from "@/lib/fetcher";
+import { fetcher, apiFetch } from "@/lib/fetcher";
 
 export default function AdminCategoriesPage() {
   const itemsPerPage = 7;
@@ -38,7 +38,7 @@ export default function AdminCategoriesPage() {
 
   const handleDelete = async (id: number) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/${id}`, {
+      const res = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/${id}`, {
         method: "DELETE"
       });
       if (res.ok) {

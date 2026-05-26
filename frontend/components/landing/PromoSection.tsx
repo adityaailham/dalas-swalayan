@@ -147,7 +147,7 @@ export default function PromoSection() {
                   className="max-w-full max-h-full object-contain drop-shadow-2xl rounded-xl border-4 border-white/10"
                 />
               ) : (
-                <Image src="/grocery_bag.png" alt="Promo" fill className="object-contain object-center drop-shadow-2xl opacity-50 p-6" />
+                <Image src="/grocery_bag.png" alt="Promo" fill sizes="(max-width: 768px) 50vw, 25vw" className="object-contain object-center drop-shadow-2xl opacity-50 p-6" />
               )}
             </div>
 

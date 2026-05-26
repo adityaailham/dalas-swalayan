@@ -60,6 +60,7 @@ export default function WhyChooseUsSection() {
               src="/store_interior.png" 
               alt="Interior Dalas Swalayan" 
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
             />
           </div>

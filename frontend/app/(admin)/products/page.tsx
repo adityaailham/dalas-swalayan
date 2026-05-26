@@ -10,7 +10,7 @@ import ProductPreviewModal from "@/components/admin/ProductPreviewModal";
 import ProductEditModal from "@/components/admin/ProductEditModal";
 import { Product } from "@/types";
 import useSWR from "swr";
-import { fetcher } from "@/lib/fetcher";
+import { fetcher, apiFetch } from "@/lib/fetcher";
 
 export default function AdminProductsPage() {
   const itemsPerPage = 7;
@@ -52,7 +52,7 @@ export default function AdminProductsPage() {
 
   const handleDelete = async (id: number) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`, {
+      const res = await apiFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`, {
         method: "DELETE"
       });
       if (res.ok) {
