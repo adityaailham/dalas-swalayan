@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model admins {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  username   String    @unique(map: "idx_admins_username") @db.VarChar(255)
+  password   String    @db.VarChar(255)
+  created_at DateTime?
+  updated_at DateTime?
+}
+
+model categories {
+  id          BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  name        String     @db.VarChar(100)
+  description String?    @db.Text
+  icon        String?    @db.VarChar(50)
+  created_at  DateTime?
+  updated_at  DateTime?
+  image_url   String?    @db.Text
+  products    products[]
+}
+
+model products {
+  id          BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  name        String           @db.VarChar(255)
+  sku         String?          @unique(map: "idx_products_sku") @db.VarChar(100)
+  description String?          @db.Text
+  price       Decimal          @db.Decimal(10, 2)
+  image_url   String?          @db.VarChar(255)
+  category_id BigInt?          @db.UnsignedBigInt
+  status      products_status? @default(aktif)
+  created_at  DateTime?
+  updated_at  DateTime?
+  categories  categories?      @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_products_category")
+
+  @@index([category_id], map: "fk_products_category")
+}
+
+model promos {
+  id          BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  title       String         @db.VarChar(255)
+  description String?        @db.Text
+  banner_url  String?        @db.VarChar(255)
+  start_date  DateTime       @db.Date
+  end_date    DateTime       @db.Date
+  sort_order  BigInt?        @default(1)
+  status      promos_status? @default(aktif)
+  created_at  DateTime?
+  updated_at  DateTime?
+}
+
+enum products_status {
+  aktif
+  nonaktif
+}
+
+enum promos_status {
+  aktif
+  nonaktif
+}
